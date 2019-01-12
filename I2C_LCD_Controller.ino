@@ -28,37 +28,37 @@ void setup() {
   digitalWrite(SW_Pin, HIGH);
   Serial.begin(9600);
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3C for 128x64 (mine)
-    Serial.println(F("SSD1306 allocation failed"));
-    for(;;); // Don't proceed, loop forever
+    Serial.println(F("SSD1306 allocation failed."));
+    for(;;); // Loop forever
   }
-
-  // Show initial display buffer contents on the screen --
-  // the library initializes this with an Adafruit splash screen.
-  display.display();
-  delay(2000); // Pause for 2 seconds
-
+  display.display(); // Display logo of Adafruits at beginning
+  delay(1000); // Pause for 1 second
   display.clearDisplay();
 }
 
 void loop() {
-  if (pressedJoystick)
-    controlDot();
-  else
+  if (pressedJoystick && startSelected) 
+    startGame();
+  else 
     introduction();
 }
 
 void introduction() { // There are some electrical noises sometimes
   if (analogRead(Y_Pin) > 526) { // Selector goes down
     startSelected = false;
+    pressedJoystick = false;
     menuIntro(startSelected); // Becomes selected at other
   } else if (analogRead(Y_Pin) < 524 ) { // Selector goes up
     startSelected = true;
+    pressedJoystick = false;
     menuIntro(startSelected); // Becomes selected at 'start'
   } else { // When controller at rest
     menuIntro(startSelected);
+    pressedJoystick = false;
   }
   if (digitalRead(SW_Pin) != 1)
     pressedJoystick = true;
+  
   display.display();
 }
 
@@ -90,20 +90,25 @@ void menuIntro(bool textColor) {
   }
 }
 
-void controlDot() {
-  int valueX = analogRead(X_Pin);
-  int valueY = analogRead(Y_Pin);
-  /* X goes from 1023 to 0 left to right */
-  /* Y goes from 1023 to 0 down to up */
-  
-  /* X goes from 0 to 128 */
-  /* Y goes from 0 to 64 */
-  int newX = map(valueX, 1023, 0, 0, 127);
-  int newY = map(valueY, 1023, 0, 63, 0);
+void spawnRandomDots(int controllerPosX, int controllerPosY) {
+  int randomX = random(0, SCREEN_WIDTH);
+  int randomY = random(0, SCREEN_HEIGHT);
+  int randomDelay = random(100, 5000);
+  do {
+    display.drawCircle(randomX, randomY, 1, WHITE);
+  } while (controllerPosX != SCREEN_WIDTH && controllerPosY != randomY);
+}
+
+void startGame() {
+  int valueX = analogRead(X_Pin); /* X goes from 1023 to 0 left to right */
+  int valueY = analogRead(Y_Pin); /* Y goes from 1023 to 0 down to up */
+  int newX = map(valueX, 1023, 0, 0, 127); /* new X goes from 0 to 128 */
+  int newY = map(valueY, 1023, 0, 63, 0); /* new Y goes from 0 to 64 */
   if (digitalRead(SW_Pin) != 1)
      display.drawPixel(-1, -1, WHITE);
-  else
+  else 
      display.drawCircle(newX, newY, 3, WHITE);
+  spawnRandomDots(newX, newY);
   display.display();
   display.clearDisplay();
 }
