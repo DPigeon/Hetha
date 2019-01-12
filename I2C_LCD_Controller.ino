@@ -9,6 +9,9 @@
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
+int lcdArray[SCREEN_WIDTH][SCREEN_HEIGHT];
+int prevLcdArray[SCREEN_WIDTH][SCREEN_HEIGHT];
+
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 #define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -17,7 +20,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 const int SW_Pin = 2; // digital pin connected to switch output
 const int X_Pin = 0; // analog pin connected to X output
 const int Y_Pin = 1; // analog pin connected to Y output
-boolean pressedJoystick = false;
+bool pressedJoystick = false;
+bool startSelected = true;
 
 void setup() {
   pinMode(SW_Pin, OUTPUT);
@@ -34,7 +38,6 @@ void setup() {
   delay(2000); // Pause for 2 seconds
 
   display.clearDisplay();
-  introduction();
 }
 
 void loop() {
@@ -44,21 +47,47 @@ void loop() {
     introduction();
 }
 
-void introduction() {
-  display.clearDisplay();
-  display.setTextSize(1);             
-  display.setTextColor(WHITE);       
-  display.setCursor(10, 10);             
-  display.println(F("Welcome to Hexa !"));
-
-  display.setCursor(20, 20); 
-  display.println("- Version 1.0");
-
-  display.setCursor(0, 40); 
-  display.println("---> Press Joystick  to begin...");
+void introduction() { // There are some electrical noises sometimes
+  if (analogRead(Y_Pin) > 526) { // Selector goes down
+    startSelected = false;
+    menuIntro(startSelected); // Becomes selected at other
+  } else if (analogRead(Y_Pin) < 524 ) { // Selector goes up
+    startSelected = true;
+    menuIntro(startSelected); // Becomes selected at 'start'
+  } else { // When controller at rest
+    menuIntro(startSelected);
+  }
   if (digitalRead(SW_Pin) != 1)
     pressedJoystick = true;
   display.display();
+}
+
+void menuIntro(bool textColor) {
+  if (textColor == true) {
+    display.clearDisplay();
+    display.setTextSize(1);             
+    display.setTextColor(WHITE);
+    display.setCursor(35, 10);             
+    display.println("Hetha Game");
+    display.setCursor(50, 30);
+    display.setTextColor(BLACK, WHITE); 
+    display.println("Start");
+    display.setTextColor(WHITE);
+    display.setCursor(50, 50); 
+    display.println("About");
+  } else {
+    display.clearDisplay();
+    display.setTextSize(1);             
+    display.setTextColor(WHITE);
+    display.setCursor(35, 10);             
+    display.println("Hetha Game");
+    display.setTextColor(WHITE);
+    display.setCursor(50, 30); 
+    display.println("Start");
+    display.setTextColor(BLACK, WHITE);
+    display.setCursor(50, 50); 
+    display.println("About");
+  }
 }
 
 void controlDot() {
@@ -74,7 +103,7 @@ void controlDot() {
   if (digitalRead(SW_Pin) != 1)
      display.drawPixel(-1, -1, WHITE);
   else
-     display.drawPixel(newX, newY, WHITE);
+     display.drawCircle(newX, newY, 3, WHITE);
   display.display();
   display.clearDisplay();
 }
