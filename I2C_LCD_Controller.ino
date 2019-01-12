@@ -16,6 +16,9 @@ int prevLcdArray[SCREEN_WIDTH][SCREEN_HEIGHT];
 #define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+/* Buzzer Variable */
+const int buzzer = 9; // digital pin connected to buzzer output
+
 /* Controller Variables */
 const int SW_Pin = 2; // digital pin connected to switch output
 const int X_Pin = 0; // analog pin connected to X output
@@ -24,6 +27,7 @@ bool pressedJoystick = false;
 bool startSelected = true;
 
 void setup() {
+  pinMode(buzzer, OUTPUT);
   pinMode(SW_Pin, OUTPUT);
   digitalWrite(SW_Pin, HIGH);
   Serial.begin(9600);
@@ -43,12 +47,19 @@ void loop() {
     introduction();
 }
 
+void selectionSound() {
+  // Maybe play with volume with a resistor here ?
+  tone(buzzer, 1);
+  delay(200);
+  noTone(buzzer);
+}
+
 void introduction() { // There are some electrical noises sometimes
-  if (analogRead(Y_Pin) > 526) { // Selector goes down
+  if (analogRead(Y_Pin) < 1023 && analogRead(Y_Pin) > 700) { // Selector goes down
     startSelected = false;
     pressedJoystick = false;
     menuIntro(startSelected); // Becomes selected at other
-  } else if (analogRead(Y_Pin) < 524 ) { // Selector goes up
+  } else if (analogRead(Y_Pin) < 400 && analogRead(Y_Pin) > 0) { // Selector goes up
     startSelected = true;
     pressedJoystick = false;
     menuIntro(startSelected); // Becomes selected at 'start'
@@ -56,9 +67,10 @@ void introduction() { // There are some electrical noises sometimes
     menuIntro(startSelected);
     pressedJoystick = false;
   }
+  if ((analogRead(Y_Pin) < 1023 && analogRead(Y_Pin) > 800) || (analogRead(Y_Pin) < 301 && analogRead(Y_Pin) > 0)) // Looks if up or down, make it buzz
+      selectionSound();
   if (digitalRead(SW_Pin) != 1)
     pressedJoystick = true;
-  
   display.display();
 }
 
@@ -108,7 +120,7 @@ void startGame() {
      display.drawPixel(-1, -1, WHITE);
   else 
      display.drawCircle(newX, newY, 3, WHITE);
-  spawnRandomDots(newX, newY);
+  //spawnRandomDots(newX, newY);
   display.display();
   display.clearDisplay();
 }
