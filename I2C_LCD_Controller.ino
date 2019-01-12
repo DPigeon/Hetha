@@ -49,17 +49,19 @@ void loop() {
 
 void selectionSound() {
   // Maybe play with volume with a resistor here ?
-  tone(buzzer, 1);
+  tone(buzzer, 100000);
   delay(200);
   noTone(buzzer);
 }
 
 void introduction() { // There are some electrical noises sometimes
   if (analogRead(Y_Pin) < 1023 && analogRead(Y_Pin) > 700) { // Selector goes down
+    selectionSound();
     startSelected = false;
     pressedJoystick = false;
     menuIntro(startSelected); // Becomes selected at other
   } else if (analogRead(Y_Pin) < 400 && analogRead(Y_Pin) > 0) { // Selector goes up
+    selectionSound();
     startSelected = true;
     pressedJoystick = false;
     menuIntro(startSelected); // Becomes selected at 'start'
@@ -67,8 +69,6 @@ void introduction() { // There are some electrical noises sometimes
     menuIntro(startSelected);
     pressedJoystick = false;
   }
-  if ((analogRead(Y_Pin) < 1023 && analogRead(Y_Pin) > 800) || (analogRead(Y_Pin) < 301 && analogRead(Y_Pin) > 0)) // Looks if up or down, make it buzz
-      selectionSound();
   if (digitalRead(SW_Pin) != 1)
     pressedJoystick = true;
   display.display();
