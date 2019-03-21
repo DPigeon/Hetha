@@ -44,12 +44,12 @@ void loop() {
   if (pressedJoystick && startSelected) 
     startGame();
   else 
-    introduction();
+    introduction(); // Make it better
 }
 
 void selectionSound() {
   // Maybe play with volume with a resistor here ?
-  tone(buzzer, 100000);
+  tone(buzzer, 100);
   delay(200);
   noTone(buzzer);
 }
@@ -92,7 +92,7 @@ void menuIntro(bool textColor) {
     display.setTextSize(1);             
     display.setTextColor(WHITE);
     display.setCursor(35, 10);             
-    display.println("Hetha Game");
+    display.println("Hetha Game!");
     display.setTextColor(WHITE);
     display.setCursor(50, 30); 
     display.println("Start");
