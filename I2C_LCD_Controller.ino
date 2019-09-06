@@ -26,7 +26,7 @@ const int Y_Pin = 1; // analog pin connected to Y output
 bool pressedJoystick = false;
 bool startSelected = true;
 
-/* Gameplay */
+/* Gameplay Variables */
 const int maxX = 127;
 const int maxY = 63;
 int prevMoveX = 63, posX = 63;
@@ -62,12 +62,6 @@ void loop() {
 void selectionSound() {
   // Maybe play with volume with a resistor here ?
   tone(buzzer, 100);
-  delay(200);
-  noTone(buzzer);
-}
-
-void losingHealthSound() {
-  tone(buzzer, 100000);
   delay(200);
   noTone(buzzer);
 }
@@ -118,62 +112,6 @@ void menuIntro(bool textColor) {
     display.setCursor(50, 50); 
     display.println("About");
   }
-}
-
-void playerMovement(int x, int y) { 
-  int boundary = 4;
-  if (x < 63 && posX >= boundary) { // Go left
-    posX = prevMoveX - offset;
-    prevMoveX = posX;
-  }
-  if (x > 63 && posX <= maxX - boundary) { // Go right
-    posX = prevMoveX + offset;
-    prevMoveX = posX;
-  }
-  if (y > 33 && posY <= maxY - boundary) { // Go down
-    posY = prevMoveY + offset;
-    prevMoveY = posY;
-  }
-  if (y < 33 && posY >= boundary) { // Go up
-    posY = prevMoveY - offset;
-    prevMoveY = posY;
-  }
-  display.fillCircle(posX, posY, playerSize, WHITE);
-}
-
-void generateArmy() {
-  //int randomDelay = random(500, 2000); // in milliseconds, in between 0.5 and 2 seconds
-  //delay(5000);
-  spawnEnemy();
-}
-
-void spawnEnemy() {
-  // posX, posY of player
-  if (ePosX > posX) { // Go left
-    ePosX = ePrevPosX - eOffset;
-    ePrevPosX = ePosX;
-  }
-  if (ePosX < posX) { // Go right
-    ePosX = ePrevPosX + eOffset;
-    ePrevPosX = ePosX;
-  }
-  if (ePosY < posY) { // Go down
-    ePosY = ePrevPosY + eOffset;
-    ePrevPosY = ePosY;
-  }
-  if (ePosY > posY) { // Go up
-    ePosY = ePrevPosY - eOffset;
-    ePrevPosY = ePosY;
-  }
-  if (ePosX == posX && ePosY == posY) { // Collision between enemy and player
-    playerSize++; // Size increases to become harder
-    losingHealthSound();
-    // Reset enemy
-    ePosX = 0;
-    ePosY = 0;
-  } 
-  else 
-    display.drawCircle(ePosX, ePosY, enemySize, WHITE);
 }
 
 void startGame() {
