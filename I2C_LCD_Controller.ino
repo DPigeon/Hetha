@@ -26,6 +26,11 @@ const int Y_Pin = 1; // analog pin connected to Y output
 bool pressedJoystick = false;
 bool startSelected = true;
 
+/* Gameplay */
+int prevMoveX, moveX = 63;
+int prevMoveY, moveY = 33;
+int offset = 1;
+
 void setup() {
   pinMode(buzzer, OUTPUT);
   pinMode(SW_Pin, OUTPUT);
@@ -80,7 +85,7 @@ void menuIntro(bool textColor) {
     display.setTextSize(1);             
     display.setTextColor(WHITE);
     display.setCursor(35, 10);             
-    display.println("Hetha Game");
+    display.println("Hetha Game!");
     display.setCursor(50, 30);
     display.setTextColor(BLACK, WHITE); 
     display.println("Start");
@@ -111,6 +116,27 @@ void spawnRandomDots(int controllerPosX, int controllerPosY) {
   } while (controllerPosX != SCREEN_WIDTH && controllerPosY != randomY);
 }
 
+void movement(int x, int y) { 
+  Serial.print(y);
+  if (x < 63) { // Go left
+    moveX = prevMoveX - offset;
+    prevMoveX = moveX;
+  }
+  if (x > 63) { // Go right
+    moveX = prevMoveX + offset;
+    prevMoveX = moveX;
+  }
+  if (y > 33) { // Go down
+    moveY = prevMoveY + offset;
+    prevMoveY = moveY;
+  }
+  if (y < 33) { // Go up
+    moveY = prevMoveY - offset;
+    prevMoveY = moveY;
+  }
+  display.drawCircle(moveX, moveY, 3, WHITE);
+}
+
 void startGame() {
   int valueX = analogRead(X_Pin); /* X goes from 1023 to 0 left to right */
   int valueY = analogRead(Y_Pin); /* Y goes from 1023 to 0 down to up */
@@ -118,8 +144,9 @@ void startGame() {
   int newY = map(valueY, 1023, 0, 63, 0); /* new Y goes from 0 to 64 */
   if (digitalRead(SW_Pin) != 1)
      display.drawPixel(-1, -1, WHITE);
-  else 
-     display.drawCircle(newX, newY, 3, WHITE);
+  else {
+      movement(newX, newY);
+  }
   //spawnRandomDots(newX, newY);
   display.display();
   display.clearDisplay();
