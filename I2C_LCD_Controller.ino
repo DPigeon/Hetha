@@ -33,6 +33,10 @@ int prevMoveX = 63, posX = 63;
 int prevMoveY = 33, posY = 33;
 int offset = 1;
 int playerSize = 3;
+int ePrevPosX = random(0, maxX), ePosX = random(0, maxX); // Spawn at top of screen
+int ePrevPosY = 0, ePosY = 0;
+int eOffset = 2; // Speed
+int enemySize = random(1, 4);
 
 void setup() {
   pinMode(buzzer, OUTPUT);
@@ -58,6 +62,12 @@ void loop() {
 void selectionSound() {
   // Maybe play with volume with a resistor here ?
   tone(buzzer, 100);
+  delay(200);
+  noTone(buzzer);
+}
+
+void losingHealthSound() {
+  tone(buzzer, 100000);
   delay(200);
   noTone(buzzer);
 }
@@ -110,16 +120,7 @@ void menuIntro(bool textColor) {
   }
 }
 
-void spawnRandomDots(int controllerPosX, int controllerPosY) {
-  int randomX = random(0, SCREEN_WIDTH);
-  int randomY = random(0, SCREEN_HEIGHT);
-  int randomDelay = random(100, 5000);
-  do {
-    display.drawCircle(randomX, randomY, 1, WHITE);
-  } while (controllerPosX != SCREEN_WIDTH && controllerPosY != randomY);
-}
-
-void movement(int x, int y) { 
+void playerMovement(int x, int y) { 
   int boundary = 4;
   if (x < 63 && posX >= boundary) { // Go left
     posX = prevMoveX - offset;
@@ -137,7 +138,42 @@ void movement(int x, int y) {
     posY = prevMoveY - offset;
     prevMoveY = posY;
   }
-  display.drawCircle(posX, posY, playerSize, WHITE);
+  display.fillCircle(posX, posY, playerSize, WHITE);
+}
+
+void generateArmy() {
+  //int randomDelay = random(500, 2000); // in milliseconds, in between 0.5 and 2 seconds
+  //delay(5000);
+  spawnEnemy();
+}
+
+void spawnEnemy() {
+  // posX, posY of player
+  if (ePosX > posX) { // Go left
+    ePosX = ePrevPosX - eOffset;
+    ePrevPosX = ePosX;
+  }
+  if (ePosX < posX) { // Go right
+    ePosX = ePrevPosX + eOffset;
+    ePrevPosX = ePosX;
+  }
+  if (ePosY < posY) { // Go down
+    ePosY = ePrevPosY + eOffset;
+    ePrevPosY = ePosY;
+  }
+  if (ePosY > posY) { // Go up
+    ePosY = ePrevPosY - eOffset;
+    ePrevPosY = ePosY;
+  }
+  if (ePosX == posX && ePosY == posY) { // Collision between enemy and player
+    playerSize++; // Size increases to become harder
+    losingHealthSound();
+    // Reset enemy
+    ePosX = 0;
+    ePosY = 0;
+  } 
+  else 
+    display.drawCircle(ePosX, ePosY, enemySize, WHITE);
 }
 
 void startGame() {
@@ -148,9 +184,9 @@ void startGame() {
   if (digitalRead(SW_Pin) != 1)
      display.drawPixel(-1, -1, WHITE);
   else {
-     movement(newX, newY);
+     playerMovement(newX, newY);
   }
-  //spawnRandomDots(newX, newY);
+  generateArmy();
   display.display();
   display.clearDisplay();
 }
