@@ -27,9 +27,12 @@ bool pressedJoystick = false;
 bool startSelected = true;
 
 /* Gameplay */
-int prevMoveX, moveX = 63;
-int prevMoveY, moveY = 33;
+const int maxX = 127;
+const int maxY = 63;
+int prevMoveX = 63, posX = 63;
+int prevMoveY = 33, posY = 33;
 int offset = 1;
+int playerSize = 3;
 
 void setup() {
   pinMode(buzzer, OUTPUT);
@@ -117,35 +120,35 @@ void spawnRandomDots(int controllerPosX, int controllerPosY) {
 }
 
 void movement(int x, int y) { 
-  Serial.print(y);
-  if (x < 63) { // Go left
-    moveX = prevMoveX - offset;
-    prevMoveX = moveX;
+  int boundary = 4;
+  if (x < 63 && posX >= boundary) { // Go left
+    posX = prevMoveX - offset;
+    prevMoveX = posX;
   }
-  if (x > 63) { // Go right
-    moveX = prevMoveX + offset;
-    prevMoveX = moveX;
+  if (x > 63 && posX <= maxX - boundary) { // Go right
+    posX = prevMoveX + offset;
+    prevMoveX = posX;
   }
-  if (y > 33) { // Go down
-    moveY = prevMoveY + offset;
-    prevMoveY = moveY;
+  if (y > 33 && posY <= maxY - boundary) { // Go down
+    posY = prevMoveY + offset;
+    prevMoveY = posY;
   }
-  if (y < 33) { // Go up
-    moveY = prevMoveY - offset;
-    prevMoveY = moveY;
+  if (y < 33 && posY >= boundary) { // Go up
+    posY = prevMoveY - offset;
+    prevMoveY = posY;
   }
-  display.drawCircle(moveX, moveY, 3, WHITE);
+  display.drawCircle(posX, posY, playerSize, WHITE);
 }
 
 void startGame() {
   int valueX = analogRead(X_Pin); /* X goes from 1023 to 0 left to right */
   int valueY = analogRead(Y_Pin); /* Y goes from 1023 to 0 down to up */
-  int newX = map(valueX, 1023, 0, 0, 127); /* new X goes from 0 to 128 */
-  int newY = map(valueY, 1023, 0, 63, 0); /* new Y goes from 0 to 64 */
+  int newX = map(valueX, 1023, 0, 0, maxX); /* new X goes from 0 to 128 */
+  int newY = map(valueY, 1023, 0, maxY, 0); /* new Y goes from 0 to 64 */
   if (digitalRead(SW_Pin) != 1)
      display.drawPixel(-1, -1, WHITE);
   else {
-      movement(newX, newY);
+     movement(newX, newY);
   }
   //spawnRandomDots(newX, newY);
   display.display();
