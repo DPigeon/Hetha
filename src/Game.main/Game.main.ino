@@ -33,11 +33,11 @@ const int maxX = 127;
 const int maxY = 63;
 int prevMoveX = 63, posX = 63;
 int prevMoveY = 33, posY = 33;
-int offset = 1;
+int offset = 5;
 int playerSize = 3;
 int ePrevPosX = random(0, maxX), ePosX = random(0, maxX); // Spawn at top of screen
 int ePrevPosY = 0, ePosY = 0;
-int eOffset = 2; // Speed
+int eOffset = 1; // Enemy Speed
 int enemySize = random(1, 4);
 
 void setup() {

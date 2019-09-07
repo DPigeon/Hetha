@@ -1,9 +1,18 @@
 
-void selectionSound() {
-  // Maybe play with volume with a resistor here ?
-  tone(buzzer, 100);
-  delay(200);
-  noTone(buzzer);
+void startGame() {
+  int valueX = analogRead(X_Pin); /* X goes from 1023 to 0 left to right */
+  int valueY = analogRead(Y_Pin); /* Y goes from 1023 to 0 down to up */
+  int newX = map(valueX, 1023, 0, 0, maxX); /* new X goes from 0 to 128 */
+  int newY = map(valueY, 1023, 0, maxY, 0); /* new Y goes from 0 to 64 */
+  if (digitalRead(SW_Pin) != 1)
+     display.drawPixel(-1, -1, WHITE);
+  else {
+     playerMovement(newX, newY); // Player controls
+  }
+  Enemy enemy;
+  enemy.generateArmy();
+  display.display();
+  display.clearDisplay();
 }
 
 void introduction() { // There are some electrical noises sometimes
@@ -26,13 +35,20 @@ void introduction() { // There are some electrical noises sometimes
   display.display();
 }
 
+void selectionSound() {
+  // Maybe play with volume with a resistor here ?
+  tone(buzzer, 90000);
+  delay(200);
+  noTone(buzzer);
+}
+
 void menuIntro(bool textColor) {
   if (textColor == true) {
     display.clearDisplay();
     display.setTextSize(1);             
     display.setTextColor(WHITE);
     display.setCursor(35, 10);             
-    display.println("Hetha Game!");
+    display.println("Hetha Game");
     display.setCursor(50, 30);
     display.setTextColor(BLACK, WHITE); 
     display.println("Start");
@@ -44,7 +60,7 @@ void menuIntro(bool textColor) {
     display.setTextSize(1);             
     display.setTextColor(WHITE);
     display.setCursor(35, 10);             
-    display.println("Hetha Game!");
+    display.println("Hetha Game");
     display.setTextColor(WHITE);
     display.setCursor(50, 30); 
     display.println("Start");
@@ -52,19 +68,4 @@ void menuIntro(bool textColor) {
     display.setCursor(50, 50); 
     display.println("About");
   }
-}
-
-void startGame() {
-  int valueX = analogRead(X_Pin); /* X goes from 1023 to 0 left to right */
-  int valueY = analogRead(Y_Pin); /* Y goes from 1023 to 0 down to up */
-  int newX = map(valueX, 1023, 0, 0, maxX); /* new X goes from 0 to 128 */
-  int newY = map(valueY, 1023, 0, maxY, 0); /* new Y goes from 0 to 64 */
-  if (digitalRead(SW_Pin) != 1)
-     display.drawPixel(-1, -1, WHITE);
-  else {
-     playerMovement(newX, newY); // Player controls
-  }
-  generateArmy(); // Generate Enemies
-  display.display();
-  display.clearDisplay();
 }
