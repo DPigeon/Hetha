@@ -3,8 +3,12 @@
 class Player
 {
   private:
+    int offset = 5;
+    int playerSize = 3;
     const int boundary = 4;
   public:
-    void playerMovement(int x, int y);
+    void PlayerMovement(int x, int y);
+    void IncrementSize();
+    int GetSize();
     ~Player();
 };

@@ -1,13 +1,15 @@
 
 #include "Enemy.h"
+#include "Player.h"
 
-void Enemy::generateArmy() {
-  //int randomDelay = random(500, 2000); // in milliseconds, in between 0.5 and 2 seconds
-  //delay(5000);
-  spawnEnemy();
+Enemy::Enemy(int x, int y, int eSize, int eSpeed) {
+  ePosX, ePrevPosX = x;
+  ePosY, ePrevPosY = y;
+  enemySize = eSize;
+  eOffset = eSpeed;
 }
 
-void Enemy::spawnEnemy() {
+void Enemy::SpawnEnemy() {
   // posX, posY of player
   if (ePosX > posX) { // Go left
     ePosX = ePrevPosX - eOffset;
@@ -26,8 +28,8 @@ void Enemy::spawnEnemy() {
     ePrevPosY = ePosY;
   }
   if (ePosX == posX && ePosY == posY) { // Collision between enemy and player
-    playerSize++; // Size increases to become harder
-    losingHealthSound();
+    player.IncrementSize(); // Size increases to become harder
+    LosingHealthSound();
     // Reset enemy
     ePosX = 0;
     ePosY = 0;
@@ -36,8 +38,8 @@ void Enemy::spawnEnemy() {
     display.drawCircle(ePosX, ePosY, enemySize, WHITE);
 }
 
-void Enemy::losingHealthSound() {
-  tone(buzzer, 100000);
+void Enemy::LosingHealthSound() {
+  tone(buzzer, healthSound);
   delay(200);
   noTone(buzzer);
 }

@@ -11,6 +11,8 @@ class World
   public:
     World();
     static World* GetInstance();
-    void addEnemy(Enemy* enemy);
+    void Draw();
+    void LoadEnemies();
+    void GenerateEnemies();
     ~World();
 };

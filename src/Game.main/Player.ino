@@ -1,7 +1,7 @@
 
 #include "Player.h"
 
-void Player::playerMovement(int x, int y) { 
+void Player::PlayerMovement(int x, int y) { 
   if (x < 63 && posX >= boundary) { // Go left
     posX = prevMoveX - offset;
     prevMoveX = posX;
@@ -19,6 +19,14 @@ void Player::playerMovement(int x, int y) {
     prevMoveY = posY;
   }
   display.fillCircle(posX, posY, playerSize, WHITE);
+}
+
+void Player::IncrementSize() {
+  playerSize++;
+}
+
+int Player::GetSize() {
+  return playerSize;
 }
 
 Player::~Player() {

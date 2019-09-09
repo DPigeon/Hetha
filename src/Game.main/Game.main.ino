@@ -9,6 +9,8 @@
 #include <Adafruit_SSD1306.h>
 
 #include "World.h"
+#include "GameInterface.h"
+#include "Player.h"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -30,20 +32,19 @@ const int Y_Pin = 1; // analog pin connected to Y output
 bool pressedJoystick = false;
 bool startSelected = true;
 
-/* Gameplay Variables */
-World world;
+/* Gameplay Global Variables */
 const int maxX = 127;
 const int maxY = 63;
-int prevMoveX = 63, posX = 63;
+
+World world;
+GameInterface gameUI;
+Player player;
+
+int prevMoveX = 63, posX = 63; // Initial player position
 int prevMoveY = 33, posY = 33;
-int offset = 5;
-int playerSize = 3;
-int ePrevPosX = random(0, maxX), ePosX = random(0, maxX); // Spawn at top of screen
-int ePrevPosY = 0, ePosY = 0;
-int eOffset = 1; // Enemy Speed
-int enemySize = random(1, 4);
 
 void setup() {
+  // Hardware Setup
   pinMode(buzzer, OUTPUT);
   pinMode(SW_Pin, OUTPUT);
   digitalWrite(SW_Pin, HIGH);
@@ -53,14 +54,15 @@ void setup() {
     for(;;); // Loop forever
   }
   display.display(); // Display logo of Adafruits at beginning
+  // Loading 
+  world.LoadEnemies();
   delay(1000); // Pause for 1 second
   display.clearDisplay();
-  
 }
 
 void loop() {
   if (pressedJoystick && startSelected) 
-    startGame();
+    world.Draw();
   else 
-    introduction();
+    gameUI.Introduction();
 }
