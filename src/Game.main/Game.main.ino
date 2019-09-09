@@ -8,6 +8,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#include "World.h"
+
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 
@@ -29,6 +31,7 @@ bool pressedJoystick = false;
 bool startSelected = true;
 
 /* Gameplay Variables */
+World world;
 const int maxX = 127;
 const int maxY = 63;
 int prevMoveX = 63, posX = 63;
@@ -52,6 +55,7 @@ void setup() {
   display.display(); // Display logo of Adafruits at beginning
   delay(1000); // Pause for 1 second
   display.clearDisplay();
+  
 }
 
 void loop() {

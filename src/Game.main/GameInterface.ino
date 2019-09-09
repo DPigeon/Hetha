@@ -1,5 +1,9 @@
 
+#include "Player.h"
+#include "Enemy.h"
+
 void startGame() {
+  Player player;
   int valueX = analogRead(X_Pin); /* X goes from 1023 to 0 left to right */
   int valueY = analogRead(Y_Pin); /* Y goes from 1023 to 0 down to up */
   int newX = map(valueX, 1023, 0, 0, maxX); /* new X goes from 0 to 128 */
@@ -7,7 +11,7 @@ void startGame() {
   if (digitalRead(SW_Pin) != 1)
      display.drawPixel(-1, -1, WHITE);
   else {
-     playerMovement(newX, newY); // Player controls
+     player.playerMovement(newX, newY); // Player controls
   }
   Enemy enemy;
   enemy.generateArmy();

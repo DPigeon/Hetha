@@ -1,8 +1,7 @@
 
-/* Variables */
-const int boundary = 4;
+#include "Player.h"
 
-void playerMovement(int x, int y) { 
+void Player::playerMovement(int x, int y) { 
   if (x < 63 && posX >= boundary) { // Go left
     posX = prevMoveX - offset;
     prevMoveX = posX;
@@ -20,4 +19,7 @@ void playerMovement(int x, int y) {
     prevMoveY = posY;
   }
   display.fillCircle(posX, posY, playerSize, WHITE);
+}
+
+Player::~Player() {
 }
