@@ -2,7 +2,8 @@
 #include "Enemy.h"
 #include "Player.h"
 
-Enemy::Enemy(int x, int y, int eSize, int eSpeed) {
+Enemy::Enemy(int id, int x, int y, int eSize, int eSpeed) {
+  id = id;
   ePosX, ePrevPosX = x;
   ePosY, ePrevPosY = y;
   enemySize = eSize;
@@ -28,11 +29,9 @@ void Enemy::SpawnEnemy() {
     ePrevPosY = ePosY;
   }
   if (ePosX == posX && ePosY == posY) { // Collision between enemy and player
-    player.IncrementSize(); // Size increases to become harder
+    //player.IncrementSize(); // Size increases to become harder
     LosingHealthSound();
-    // Reset enemy
-    ePosX = 0;
-    ePosY = 0;
+    gameUI.GameOver();
   } 
   else 
     display.drawCircle(ePosX, ePosY, enemySize, WHITE);
@@ -42,6 +41,22 @@ void Enemy::LosingHealthSound() {
   tone(buzzer, healthSound);
   delay(200);
   noTone(buzzer);
+}
+
+int Enemy::GetPositionX() {
+  return ePosX;
+}
+
+int Enemy::GetPositionY() {
+  return ePosY;
+}
+
+int Enemy::GetSize() {
+  return enemySize;
+}
+
+int Enemy::GetSpeed() {
+  return eOffset;
 }
 
 Enemy::~Enemy() {

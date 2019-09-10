@@ -56,5 +56,16 @@ void GameInterface::MenuIntro(bool textColor) {
   }
 }
 
+void GameInterface::GameOver() {
+  display.clearDisplay();
+  display.setTextSize(1);             
+  display.setTextColor(WHITE);
+  display.setCursor(35, 10);             
+  display.println("GAME OVER");
+  display.setCursor(47, 30);
+  display.setTextColor(BLACK, WHITE); 
+  display.println("Retry");
+}
+
 GameInterface::~GameInterface() {
 }

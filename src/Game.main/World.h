@@ -5,7 +5,8 @@
 class World
 {
   private:
-    const static int numEnemy = 5;
+    const static int numEnemy = 1;
+    int currentNumEnemy = 0;
     static World* instance; 
     Enemy* enemies[numEnemy];
   public:
@@ -13,6 +14,7 @@ class World
     static World* GetInstance();
     void Draw();
     void LoadEnemies();
-    void GenerateEnemies();
+    void DetectCollision();
+    void RemoveEnemy(int index);
     ~World();
 };

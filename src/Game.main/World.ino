@@ -23,21 +23,42 @@ void World::Draw() {
   else {
      player.PlayerMovement(newX, newY); // Player controls
   }
-  GenerateEnemies();
+  
+  for (int i = 0; i < numEnemy; i++) {
+    enemies[i]->SpawnEnemy();
+  }
+
+  //DetectCollision();
+  
   display.display();
   display.clearDisplay();
 }
 
 void World::LoadEnemies() {
   for (int i = 0; i < numEnemy; i++) {
-    Enemy* enemy = new Enemy(random(0, 127), 0, random(1, 4), 1);
+    Enemy* enemy = new Enemy(i, random(0, 127), 0, random(1, 4), 1);
     enemies[i] = enemy;
+    currentNumEnemy++;
   }
 }
 
-void World::GenerateEnemies() {
-  for (int i = 0; i < numEnemy; i++) 
-    enemies[i]->SpawnEnemy();
+void World::DetectCollision() {
+  for (int i = 0; i < currentNumEnemy - 1; i++) {
+    for (int j = i + 1; j < currentNumEnemy; j++) {
+      if (enemies[i]->GetPositionX() == enemies[j]->GetPositionX()  && enemies[i]->GetPositionY() == enemies[j]->GetPositionY()) {
+        Serial.print(enemies[i]->GetPositionX());
+        RemoveEnemy(i);
+        delete enemies[i];
+      }
+    }
+  }
+}
+
+void World::RemoveEnemy(int index) {
+  for (int i = index; i < currentNumEnemy; i++) {
+    enemies[i] = enemies[i + 1];
+  }
+  currentNumEnemy--;
 }
 
 World::~World() {

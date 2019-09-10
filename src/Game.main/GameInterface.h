@@ -8,5 +8,6 @@ class GameInterface
     void Introduction();
     void SelectionSound();
     void MenuIntro(bool textColor);
+    void GameOver();
     ~GameInterface();
 };
