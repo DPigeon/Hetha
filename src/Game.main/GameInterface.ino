@@ -56,6 +56,17 @@ void GameInterface::MenuIntro(bool textColor) {
   }
 }
 
+void GameInterface::LevelUp(int level) {
+  display.clearDisplay();
+  display.setTextSize(1);             
+  display.setTextColor(WHITE);
+  display.setCursor(35, 10);             
+  display.println("LEVEL " + level);
+  display.setCursor(47, 30);
+  display.setTextColor(BLACK, WHITE); 
+  display.println("Test " + level);
+}
+
 void GameInterface::GameOver() {
   display.clearDisplay();
   display.setTextSize(1);             

@@ -5,6 +5,7 @@
 class World
 {
   private:
+    const static int levels = 10;
     const static int numEnemy = 1;
     int currentNumEnemy = 0;
     static World* instance; 
