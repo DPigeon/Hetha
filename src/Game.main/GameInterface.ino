@@ -3,6 +3,8 @@
 #include "World.h"
 
 void GameInterface::Introduction() { // There are some electrical noises sometimes
+  World* world = World::GetInstance();
+  world->SetGameState(MENU);
   if (analogRead(Y_Pin) < 1023 && analogRead(Y_Pin) > 700) { // Selector goes down
     SelectionSound();
     startSelected = false;
@@ -71,11 +73,13 @@ void GameInterface::LevelUp(int level) {
   World* world = World::GetInstance();
   world->LevelUp();
   world->SetNewEnemySpeed(level);
+  world->SetGameState(LEVELUP);
 }
 
 void GameInterface::GameOver() {
   World* world = World::GetInstance();
   world->SetLevel(1);
+  world->SetGameState(GAMEOVER);
   display.clearDisplay();
   display.setTextSize(1);             
   display.setTextColor(WHITE);

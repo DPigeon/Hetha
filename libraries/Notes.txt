@@ -1,1 +1,2 @@
-- Adafruits' GFX libraries (download it on Arduino)
+- Adafruits' GFX
+- ArduinoSTL

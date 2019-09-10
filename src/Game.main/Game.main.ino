@@ -56,6 +56,7 @@ void setup() {
   }
   display.display(); // Display logo of Adafruits at beginning
   // Loading 
+  world.SetGameState(LOADING);
   world.LoadEnemies();
   delay(1000); // Pause for 1 second
   display.clearDisplay();
