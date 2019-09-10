@@ -2,8 +2,7 @@
 #include "Enemy.h"
 #include "Player.h"
 
-Enemy::Enemy(int id, int x, int y, int eSize, int eSpeed) {
-  id = id;
+Enemy::Enemy(int x, int y, int eSize, int eSpeed) {
   ePosX, ePrevPosX = x;
   ePosY, ePrevPosY = y;
   enemySize = eSize;
@@ -57,6 +56,10 @@ int Enemy::GetSize() {
 
 int Enemy::GetSpeed() {
   return eOffset;
+}
+
+void Enemy::SetSpeed(int s) {
+  eOffset = s;
 }
 
 Enemy::~Enemy() {

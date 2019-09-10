@@ -39,6 +39,7 @@ const int maxY = 63;
 World world;
 GameInterface gameUI;
 Player player;
+unsigned long time = millis(); // Time since program started
 
 int prevMoveX = 63, posX = 63; // Initial player position
 int prevMoveY = 33, posY = 33;

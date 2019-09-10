@@ -36,7 +36,7 @@ void World::Draw() {
 
 void World::LoadEnemies() {
   for (int i = 0; i < numEnemy; i++) {
-    Enemy* enemy = new Enemy(i, random(0, 127), 0, random(1, 4), 1);
+    Enemy* enemy = new Enemy(random(0, 127), 0, random(1, 4), 1);
     enemies[i] = enemy;
     currentNumEnemy++;
   }
@@ -59,6 +59,28 @@ void World::RemoveEnemy(int index) {
     enemies[i] = enemies[i + 1];
   }
   currentNumEnemy--;
+}
+
+void World::LevelUp() {
+  currentLevel++;
+}
+
+void World::SetLevel(int level) {
+  currentLevel = level;
+}
+
+int World::GetLevel() {
+  return currentLevel;
+}
+
+int World::GetLevels() {
+  return levels;
+}
+
+void World::SetNewEnemySpeed(int speedLevel) {
+  for (int i = 0; i < numEnemy; i++) {
+    enemies[i]->SetSpeed(speedLevel);
+  }
 }
 
 World::~World() {

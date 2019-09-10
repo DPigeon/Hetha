@@ -3,7 +3,6 @@
 class Enemy
 {
   private:
-    int id;
     int ePrevPosX; // Spawn at top of screen    
     int ePosX;
     int ePrevPosY;
@@ -12,12 +11,13 @@ class Enemy
     int enemySize;
     int healthSound = 100000;
   public:
-    Enemy(int id, int x, int y, int eSize, int eSpeed);
+    Enemy(int x, int y, int eSize, int eSpeed);
     void SpawnEnemy();
     void LosingHealthSound();
     int GetPositionX();
     int GetPositionY();
     int GetSize();
     int GetSpeed();
+    void SetSpeed(int s);
     ~Enemy();
 };

@@ -1,5 +1,6 @@
 
 #include "GameInterface.h"
+#include "World.h"
 
 void GameInterface::Introduction() { // There are some electrical noises sometimes
   if (analogRead(Y_Pin) < 1023 && analogRead(Y_Pin) > 700) { // Selector goes down
@@ -56,6 +57,7 @@ void GameInterface::MenuIntro(bool textColor) {
   }
 }
 
+// SEGMENTATION FAULT ?
 void GameInterface::LevelUp(int level) {
   display.clearDisplay();
   display.setTextSize(1);             
@@ -65,9 +67,15 @@ void GameInterface::LevelUp(int level) {
   display.setCursor(47, 30);
   display.setTextColor(BLACK, WHITE); 
   display.println("Test " + level);
+  delay(2000);
+  World* world = World::GetInstance();
+  world->LevelUp();
+  world->SetNewEnemySpeed(level);
 }
 
 void GameInterface::GameOver() {
+  World* world = World::GetInstance();
+  world->SetLevel(1);
   display.clearDisplay();
   display.setTextSize(1);             
   display.setTextColor(WHITE);
@@ -75,7 +83,10 @@ void GameInterface::GameOver() {
   display.println("GAME OVER");
   display.setCursor(47, 30);
   display.setTextColor(BLACK, WHITE); 
-  display.println("Retry");
+  display.println("Move to");
+  display.setCursor(43, 50);
+  display.setTextColor(BLACK, WHITE); 
+  display.println("continue");
 }
 
 GameInterface::~GameInterface() {
