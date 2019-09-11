@@ -3,7 +3,7 @@
 class Player
 {
   private:
-    int offset = 5;
+    int offset = 5; // player speed
     int playerSize = 3;
     const int boundary = 4;
   public:

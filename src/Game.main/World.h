@@ -4,11 +4,11 @@
 
 enum GameState
 {
-  LOADING,
-  MENU,
-  RUNNING,
-  LEVELUP,
-  GAMEOVER
+  LOADING, // 0
+  MENU,    // 1
+  RUNNING, // 2
+  LEVELUP, // 3
+  GAMEOVER // 4
 };
 
 class World
@@ -24,6 +24,7 @@ class World
   public:
     World();
     static World* GetInstance();
+    void Update(float dt);
     void Draw();
     void LoadEnemies();
     void DetectCollision();

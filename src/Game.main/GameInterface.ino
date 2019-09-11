@@ -78,7 +78,7 @@ void GameInterface::LevelUp(int level) {
 
 void GameInterface::GameOver() {
   World* world = World::GetInstance();
-  world->SetLevel(1);
+  world->SetLevel(1); // Reset level back to 1
   world->SetGameState(GAMEOVER);
   display.clearDisplay();
   display.setTextSize(1);             

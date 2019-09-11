@@ -2,8 +2,11 @@
 #include "World.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Projectile.h"
 
 World* World::instance;
+const int projectileNum = 10;
+Projectile* projectileList[projectileNum];
 
 World::World() {
   instance = this;
@@ -11,6 +14,14 @@ World::World() {
 
 World* World::GetInstance() {
   return instance;
+}
+
+void World::Update(float dt) {
+  if (GetGameState() == 2) { // We make sure to only draw the projectiles in the running state
+    for (int i = 0; i < projectileNum; i++) {
+        projectileList[i]->Update(dt);
+    }
+  }
 }
 
 void World::Draw() {
@@ -24,13 +35,29 @@ void World::Draw() {
   else {
      player.PlayerMovement(newX, newY); // Player controls
   }
-  
+
+  /* Draw Enemies */
   for (int i = 0; i < numEnemy; i++) {
     enemies[i]->SpawnEnemy();
   }
 
   //DetectCollision();
-  
+
+  /* Update Projectiles */
+  if (digitalRead(Button_Pin) == 1) {
+    Projectile* projectile = new Projectile(posX, posY, 10);
+    for (int i = 0; i < projectileNum; i++) {
+      projectileList[i] = projectile;
+    }
+  }
+
+  /* Draw Projectiles */
+  if (GetGameState() == 2) { // We make sure to only draw the projectiles in the running state
+    for (int i = 0; i < projectileNum; i++) {
+        projectileList[i]->Draw();
+    }
+  }
+    
   display.display();
   display.clearDisplay();
 }
@@ -47,7 +74,6 @@ void World::DetectCollision() {
   for (int i = 0; i < currentNumEnemy - 1; i++) {
     for (int j = i + 1; j < currentNumEnemy; j++) {
       if (enemies[i]->GetPositionX() == enemies[j]->GetPositionX()  && enemies[i]->GetPositionY() == enemies[j]->GetPositionY()) {
-        Serial.print(enemies[i]->GetPositionX());
         RemoveEnemy(i);
         delete enemies[i];
       }
@@ -92,5 +118,5 @@ GameState World::GetGameState() {
   return GetInstance()->gameState;
 }
 World::~World() {
-  delete enemies;
+  delete [] enemies;
 }

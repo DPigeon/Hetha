@@ -29,6 +29,7 @@ const int buzzer = 9; // digital pin connected to buzzer output
 const int SW_Pin = 2; // digital pin connected to switch output
 const int X_Pin = 0; // analog pin connected to X output
 const int Y_Pin = 1; // analog pin connected to Y output
+const int Button_Pin = 7; // digital ping connected to button
 bool pressedJoystick = false;
 bool startSelected = true;
 
@@ -39,7 +40,6 @@ const int maxY = 63;
 World world;
 GameInterface gameUI;
 Player player;
-unsigned long time = millis(); // Time since program started
 
 int prevMoveX = 63, posX = 63; // Initial player position
 int prevMoveY = 33, posY = 33;
@@ -48,6 +48,7 @@ void setup() {
   // Hardware Setup
   pinMode(buzzer, OUTPUT);
   pinMode(SW_Pin, OUTPUT);
+  pinMode(Button_Pin, INPUT);
   digitalWrite(SW_Pin, HIGH);
   Serial.begin(9600);
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3C for 128x64 (mine)
@@ -63,8 +64,12 @@ void setup() {
 }
 
 void loop() {
-  if (pressedJoystick && startSelected) 
+  float time = millis(); // Time since program started
+  float dt = time / 1000;
+  if (pressedJoystick && startSelected) {
+    world.Update(dt);
     world.Draw();
-  else 
+  } else {
     gameUI.Introduction();
+  }
 }
