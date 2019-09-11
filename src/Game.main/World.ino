@@ -17,8 +17,15 @@ World* World::GetInstance() {
 }
 
 void World::Update(float dt) {
+
+  if (digitalRead(Button_Pin) == 1 && currentProjectileNum < projectileNum) {
+    Projectile* projectile = new Projectile(posX, posY, 1);
+      projectileList[currentProjectileNum] = projectile;
+      currentProjectileNum++;
+  }
+  
   if (GetGameState() == 2) { // We make sure to only draw the projectiles in the running state
-    for (int i = 0; i < projectileNum; i++) {
+    for (int i = 0; i < currentProjectileNum; i++) {
         projectileList[i]->Update(dt);
     }
   }
@@ -36,27 +43,19 @@ void World::Draw() {
      player.PlayerMovement(newX, newY); // Player controls
   }
 
+  /* Draw Projectiles */
+  if (GetGameState() == 2) { // We make sure to only draw the projectiles in the running state
+    for (int i = 0; i < currentProjectileNum; i++) {
+        projectileList[i]->Draw();
+    }
+  }
+
   /* Draw Enemies */
   for (int i = 0; i < numEnemy; i++) {
     enemies[i]->SpawnEnemy();
   }
 
   //DetectCollision();
-
-  /* Update Projectiles */
-  if (digitalRead(Button_Pin) == 1) {
-    Projectile* projectile = new Projectile(posX, posY, 10);
-    for (int i = 0; i < projectileNum; i++) {
-      projectileList[i] = projectile;
-    }
-  }
-
-  /* Draw Projectiles */
-  if (GetGameState() == 2) { // We make sure to only draw the projectiles in the running state
-    for (int i = 0; i < projectileNum; i++) {
-        projectileList[i]->Draw();
-    }
-  }
     
   display.display();
   display.clearDisplay();
@@ -119,4 +118,5 @@ GameState World::GetGameState() {
 }
 World::~World() {
   delete [] enemies;
+  delete [] projectileList;
 }

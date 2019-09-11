@@ -18,6 +18,7 @@ class World
     int currentLevel = 1;
     const static int numEnemy = 1;
     int currentNumEnemy = 0;
+    int currentProjectileNum = 0;
     static World* instance; 
     GameState gameState;
     Enemy* enemies[numEnemy];
