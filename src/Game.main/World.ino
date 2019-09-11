@@ -47,6 +47,7 @@ void World::Draw() {
   if (GetGameState() == 2) { // We make sure to only draw the projectiles in the running state
     for (int i = 0; i < currentProjectileNum; i++) {
         projectileList[i]->Draw();
+        projectileList[i]->DeleteOutOfMap();
     }
   }
 
@@ -85,6 +86,12 @@ void World::RemoveEnemy(int index) {
     enemies[i] = enemies[i + 1];
   }
   currentNumEnemy--;
+}
+
+void World::RemoveProjectile() {
+  // We always remove the first in the list array
+  projectileList[0] = projectileList[1];
+  currentProjectileNum--;
 }
 
 void World::LevelUp() {
