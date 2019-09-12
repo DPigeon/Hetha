@@ -62,11 +62,18 @@ void World::Draw() {
   }
 
   /* Draw Enemies */
-  for (int i = 0; i < numEnemy; i++) {
-    enemies[i]->SpawnEnemy();
+  if (currentNumEnemy > 0) {
+    for (int i = 0; i < numEnemy; i++) {
+       enemies[i]->SpawnEnemy();
+    }
+  }
+  // Draw Upcoming Enemies by Loading more
+  if (currentNumEnemy == 0) {
+    LoadEnemies(); // Will add some more enemies depending on what level we are in for difficulty
   }
 
-  //DetectCollision();
+  DetectProjectileEnemyCollision();
+  //DetectEnemiesCollision();
     
   display.display();
   display.clearDisplay();
@@ -80,12 +87,28 @@ void World::LoadEnemies() {
   }
 }
 
-void World::DetectCollision() {
+void World::DetectProjectileEnemyCollision() {
+  for (int i = 0; i < currentProjectileNum; i++) {
+    for (int j = 0; j < currentNumEnemy; j++) {
+      if (projectileList[i]->GetPositionX() == enemies[j]->GetPositionX() && projectileList[i]->GetPositionX() == enemies[j]->GetPositionX()) {
+        enemies[i]->DefeatedSound();
+        RemoveProjectile(i);
+        RemoveEnemy(j);
+        delete projectileList[i];
+        delete enemies[j];
+      }
+    }
+  }
+}
+
+void World::DetectEnemiesCollision() {
   for (int i = 0; i < currentNumEnemy - 1; i++) {
     for (int j = i + 1; j < currentNumEnemy; j++) {
       if (enemies[i]->GetPositionX() == enemies[j]->GetPositionX()  && enemies[i]->GetPositionY() == enemies[j]->GetPositionY()) {
         RemoveEnemy(i);
+        RemoveEnemy(j);
         delete enemies[i];
+        delete enemies[j];
       }
     }
   }
@@ -98,12 +121,10 @@ void World::RemoveEnemy(int index) {
   currentNumEnemy--;
 }
 
-void World::RemoveProjectile() {
-  int positionToRemove = 0; // We always remove the first in the list array
-  for (int i = positionToRemove; i < currentProjectileNum; ++i) {
+void World::RemoveProjectile(int index) {
+  for (int i = index; i < currentProjectileNum; ++i) {
     projectileList[i] = projectileList[i + 1];
   }
-  // Shrink the array
   currentProjectileNum--;
 }
 

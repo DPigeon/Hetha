@@ -13,6 +13,8 @@ class Projectile
     Draw();
     Update(float dt);
     DeleteOutOfMap();
+    GetPositionX();
+    GetPositionY();
     SetPosition(int x, int y);
     SetVelocity(int vX, int vY);
     ~Projectile();

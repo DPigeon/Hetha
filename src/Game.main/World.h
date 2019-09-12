@@ -30,9 +30,10 @@ class World
     void Update(float dt);
     void Draw();
     void LoadEnemies();
-    void DetectCollision();
+    void DetectProjectileEnemyCollision();
+    void DetectEnemiesCollision();
     void RemoveEnemy(int index);
-    void RemoveProjectile();
+    void RemoveProjectile(int index);
     void LevelUp();
     void SetLevel(int level);
     int GetLevel();

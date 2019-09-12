@@ -21,9 +21,17 @@ Projectile::Update(float dt) {
 Projectile::DeleteOutOfMap() {
   if (pPosY < 0) {
     World* world = World::GetInstance();
-    world->RemoveProjectile(); 
+    world->RemoveProjectile(0); // Always removing the first projectile in list
     delete this; // Freeing up memory once a projectile is not in map anymore ERROR here
   }
+}
+
+Projectile::GetPositionX() {
+  return pPosX;
+}
+
+Projectile::GetPositionY() {
+  return pPosY;
 }
 
 Projectile::SetPosition(int x, int y) {

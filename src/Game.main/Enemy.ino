@@ -42,6 +42,12 @@ void Enemy::LosingHealthSound() {
   noTone(buzzer);
 }
 
+void Enemy::DefeatedSound() {
+  tone(buzzer, deadSound);
+  delay(200);
+  noTone(buzzer);
+}
+
 int Enemy::GetPositionX() {
   return ePosX;
 }
