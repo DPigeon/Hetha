@@ -30,15 +30,14 @@ void World::Update(float dt) {
     }
   }
 
+if (dt >= timeLevel[currentLevel - 1] && dt <= timeLevel[currentLevel - 1] + levelDelay) {
+  // Interface should stay there for 4 seconds, but does not
+    gameUI.LevelUp(currentLevel);
+  }
+
   // Levels
   if (dt >= timeLevel[currentLevel - 1]) {
     LevelUp();
-  }
-
-// This interval does not work properly to show level up interface
-  if (timeLevel[currentLevel - 1] > dt && timeLevel[currentLevel - 1] + levelDelay < dt) {
-    Serial.print("show");
-    gameUI.LevelUp(currentLevel);
   }
 }
 
@@ -115,7 +114,9 @@ void World::LevelUp() {
 }
 
 void World::SetLevel(int level) {
+  // When gameover, reset
   currentLevel = level;
+  SetNewEnemySpeed(level);
 }
 
 int World::GetLevel() {
