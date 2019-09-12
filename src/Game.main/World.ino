@@ -89,8 +89,11 @@ void World::RemoveEnemy(int index) {
 }
 
 void World::RemoveProjectile() {
-  // We always remove the first in the list array
-  projectileList[0] = projectileList[1];
+  int positionToRemove = 0; // We always remove the first in the list array
+  for (int i = positionToRemove; i < currentProjectileNum; ++i) {
+    projectileList[i] = projectileList[i + 1];
+  }
+  // Shrink the array
   currentProjectileNum--;
 }
 

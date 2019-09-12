@@ -9,7 +9,7 @@ class Enemy
     int ePosY;
     int eOffset; // Enemy Speed
     int enemySize;
-    int healthSound = 100000;
+    int healthSound = 3000;
   public:
     Enemy(int x, int y, int eSize, int eSpeed);
     void SpawnEnemy();

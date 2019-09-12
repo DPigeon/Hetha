@@ -3,7 +3,7 @@
 class GameInterface
 {
   private:
-    int uiSound = 90000;
+    int uiSound = 2000;
   public:
     void Introduction();
     void SelectionSound();

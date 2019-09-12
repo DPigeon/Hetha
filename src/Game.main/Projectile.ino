@@ -21,8 +21,8 @@ Projectile::Update(float dt) {
 Projectile::DeleteOutOfMap() {
   if (pPosY < 0) {
     World* world = World::GetInstance();
-    world->RemoveProjectile();
-    delete this; // Freeing up memory once a projectile is not in map anymore 
+    world->RemoveProjectile(); 
+    delete this; // Freeing up memory once a projectile is not in map anymore ERROR here
   }
 }
 
