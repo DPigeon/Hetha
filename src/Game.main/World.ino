@@ -18,16 +18,27 @@ World* World::GetInstance() {
 
 void World::Update(float dt) {
 
+  // Projectiles
   if (digitalRead(Button_Pin) == 1 && currentProjectileNum < projectileNum) {
     Projectile* projectile = new Projectile(posX, posY, 1);
       projectileList[currentProjectileNum] = projectile;
       currentProjectileNum++;
   }
-  
   if (GetGameState() == 2) { // We make sure to only draw the projectiles in the running state
     for (int i = 0; i < currentProjectileNum; i++) {
         projectileList[i]->Update(dt);
     }
+  }
+
+  // Levels
+  if (dt >= timeLevel[currentLevel - 1]) {
+    LevelUp();
+  }
+
+// This interval does not work properly to show level up interface
+  if (timeLevel[currentLevel - 1] > dt && timeLevel[currentLevel - 1] + levelDelay < dt) {
+    Serial.print("show");
+    gameUI.LevelUp(currentLevel);
   }
 }
 
@@ -99,6 +110,8 @@ void World::RemoveProjectile() {
 
 void World::LevelUp() {
   currentLevel++;
+  SetGameState(LEVELUP);
+  SetNewEnemySpeed(currentLevel);
 }
 
 void World::SetLevel(int level) {

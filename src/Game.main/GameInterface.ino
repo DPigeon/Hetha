@@ -59,21 +59,18 @@ void GameInterface::MenuIntro(bool textColor) {
   }
 }
 
-// SEGMENTATION FAULT ?
 void GameInterface::LevelUp(int level) {
   display.clearDisplay();
   display.setTextSize(1);             
   display.setTextColor(WHITE);
   display.setCursor(35, 10);             
-  display.println("LEVEL " + level);
+  display.println("LEVEL UP!");
   display.setCursor(47, 30);
   display.setTextColor(BLACK, WHITE); 
-  display.println("Test " + level);
-  delay(2000);
-  World* world = World::GetInstance();
-  world->LevelUp();
-  world->SetNewEnemySpeed(level);
-  world->SetGameState(LEVELUP);
+  display.println("Hetha");
+  display.setCursor(43, 50);
+  display.setTextColor(BLACK, WHITE); 
+  display.println("Level" + level);
 }
 
 void GameInterface::GameOver() {
