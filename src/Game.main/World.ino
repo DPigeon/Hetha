@@ -66,14 +66,12 @@ void World::Draw() {
     for (int i = 0; i < numEnemy; i++) {
        enemies[i]->SpawnEnemy();
     }
-  }
-  // Draw Upcoming Enemies by Loading more
-  if (currentNumEnemy == 0) {
+  } else { 
     LoadEnemies(); // Will add some more enemies depending on what level we are in for difficulty
   }
-
+  
   DetectProjectileEnemyCollision();
-  //DetectEnemiesCollision();
+  DetectEnemiesCollision();
     
   display.display();
   display.clearDisplay();
@@ -81,7 +79,7 @@ void World::Draw() {
 
 void World::LoadEnemies() {
   for (int i = 0; i < numEnemy; i++) {
-    Enemy* enemy = new Enemy(random(0, 127), 0, random(1, 4), 1);
+    Enemy* enemy = new Enemy(random(0, 127), 0, 1, 1); // size could be randomized, currently 1 now
     enemies[i] = enemy;
     currentNumEnemy++;
   }
@@ -92,8 +90,8 @@ void World::DetectProjectileEnemyCollision() {
     for (int j = 0; j < currentNumEnemy; j++) {
       if (projectileList[i]->GetPositionX() == enemies[j]->GetPositionX() && projectileList[i]->GetPositionX() == enemies[j]->GetPositionX()) {
         enemies[i]->DefeatedSound();
-        RemoveProjectile(i);
-        RemoveEnemy(j);
+        //RemoveProjectile(i);
+        //RemoveEnemy(j);
         delete projectileList[i];
         delete enemies[j];
       }
@@ -102,13 +100,16 @@ void World::DetectProjectileEnemyCollision() {
 }
 
 void World::DetectEnemiesCollision() {
-  for (int i = 0; i < currentNumEnemy - 1; i++) {
-    for (int j = i + 1; j < currentNumEnemy; j++) {
-      if (enemies[i]->GetPositionX() == enemies[j]->GetPositionX()  && enemies[i]->GetPositionY() == enemies[j]->GetPositionY()) {
-        RemoveEnemy(i);
-        RemoveEnemy(j);
-        delete enemies[i];
-        delete enemies[j];
+  if (currentNumEnemy > 0) {
+    for (int i = 0; i < currentNumEnemy - 1; i++) {
+      for (int j = i + 1; j < currentNumEnemy; j++) {
+        if (enemies[i]->GetPositionX() == enemies[j]->GetPositionX()  && enemies[i]->GetPositionY() == enemies[j]->GetPositionY()) {
+         // RemoveEnemy(i);
+         // RemoveEnemy(j);
+          delete enemies[i];
+         // delete enemies[j];
+          currentNumEnemy--;
+        }
       }
     }
   }
@@ -129,9 +130,11 @@ void World::RemoveProjectile(int index) {
 }
 
 void World::LevelUp() {
-  currentLevel++;
-  SetGameState(LEVELUP);
-  SetNewEnemySpeed(currentLevel);
+  if (GetGameState() != 1 || GetGameState() != 4) { // Allow leveling up if the game state is not at menu or on game over
+    currentLevel++;
+    SetGameState(LEVELUP);
+    SetNewEnemySpeed(currentLevel);
+  }
 }
 
 void World::SetLevel(int level) {

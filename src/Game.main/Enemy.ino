@@ -11,23 +11,28 @@ Enemy::Enemy(int x, int y, int eSize, int eSpeed) {
 
 void Enemy::SpawnEnemy() {
   // posX, posY of player
+  int enemyOffset = 0;
   if (ePosX > posX) { // Go left
-    ePosX = ePrevPosX - eOffset;
+    enemyOffset = - eOffset;
+    ePosX = ePrevPosX + enemyOffset;
     ePrevPosX = ePosX;
   }
   if (ePosX < posX) { // Go right
-    ePosX = ePrevPosX + eOffset;
+    enemyOffset = eOffset;
+    ePosX = ePrevPosX + enemyOffset;
     ePrevPosX = ePosX;
   }
   if (ePosY < posY) { // Go down
-    ePosY = ePrevPosY + eOffset;
+    enemyOffset = eOffset;
+    ePosY = ePrevPosY + enemyOffset;
     ePrevPosY = ePosY;
   }
   if (ePosY > posY) { // Go up
-    ePosY = ePrevPosY - eOffset;
+    enemyOffset = - eOffset;
+    ePosY = ePrevPosY + enemyOffset;
     ePrevPosY = ePosY;
   }
-  if (ePosX == posX && ePosY == posY) { // Collision between enemy and player
+  if (ePosX + enemyOffset == posX && ePosY + enemyOffset == posY) { // Collision between enemy and player
     //player.IncrementSize(); // Size increases to become harder
     LosingHealthSound();
     gameUI.GameOver();
