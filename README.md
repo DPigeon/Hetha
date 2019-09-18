@@ -2,6 +2,9 @@
 Hetha is a small Arduino game. 
 
 ![ui](https://user-images.githubusercontent.com/37888675/65113891-d572fe00-d9b2-11e9-8760-d5c870899061.png)
+![levelUp](https://user-images.githubusercontent.com/37888675/65174091-31bf3780-da1e-11e9-897b-a24279896f6d.png)
+![gameOver](https://user-images.githubusercontent.com/37888675/65174089-31bf3780-da1e-11e9-8129-6274c685ff39.png)
+
 * Goal: Get away from the enemies
 * Levels: 10
 * Abilities: Kill enemies with projectiles, hide and other strategies
