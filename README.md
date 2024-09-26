@@ -10,6 +10,9 @@ Hetha is a small Arduino game.
 * Abilities: Kill enemies with projectiles, hide and other strategies
 * Difficulty: Every time you level up, the speed's enemy will increase
 
+![hetha-gif](https://github.com/user-attachments/assets/63aae079-f8cd-4860-9f3e-e2d6fbc33ee2)
+
+
 # Setup
 You can setup the game by looking at this [page](https://github.com/DPigeon/Hetha/wiki) and connect everything. 
 Set your board and port on the Tools tab in the Arduino IDE. The port used is:
